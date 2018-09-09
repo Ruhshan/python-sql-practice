@@ -2,7 +2,7 @@ import sqlite3
 import openpyxl
 
 # Creating connection to a .sqlite3 db. This will create the file when the script runs for the first time
-conn = sqlite3.connect('db.sqlite3')
+conn = sqlite3.connect('db_big.sqlite3')
 # Taking the cursor
 c = conn.cursor()
 
@@ -68,11 +68,18 @@ if inspections == 0:
         if ct != 0:
             values = []
             for cell in row:
-                values.append('''"{}"'''.format(cell.value))
+                cell_value = str(cell.value)
+                cell_value = cell_value.replace('"', "'")
+
+                values.append(' "{}" '.format(cell_value))
             values_for_query = ','.join(values)
 
             final_query = insert_into_inspection.format(values_for_query)
-            c.execute(final_query)
+            try:
+                c.execute(final_query)
+            except:
+                print(final_query)
+                break
         ct=1
     # This will save the changes in the database
     conn.commit()
@@ -92,11 +99,14 @@ if violations == 0:
         if ct != 0:
             values = []
             for cell in row:
-                values.append('''"{}"'''.format(cell.value))
+                cell_value = str(cell.value)
+                cell_value = cell_value.replace('"', "'")
+
+                values.append(' "{}" '.format(cell_value))
             values_for_query = ','.join(values)
 
             final_query = insert_into_violation.format(values_for_query)
-            print(final_query)
+
             c.execute(final_query)
         ct = 1
     conn.commit()
