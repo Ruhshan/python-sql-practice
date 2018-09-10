@@ -1,0 +1,17 @@
+select distinct inspection.facility_name, inspection.facility_zip, violation.points, inspection.serial_number from inspection join  violation on
+inspection.serial_number = violation.serial_number limit 10;
+
+select count(*) from inspection join  violation on
+inspection.serial_number = violation.serial_number limit 10;
+
+
+select distinct inspection.facility_name, inspection.facility_zip, inspection.facility_city from inspection join  violation on
+inspection.serial_number = violation.serial_number where violation.points >= 1 limit 10;
+
+
+create table "Previous Violation" AS select distinct inspection.facility_name, inspection.facility_address, inspection.facility_zip, inspection.facility_city from inspection join  violation on
+inspection.serial_number = violation.serial_number where violation.points >= 1 limit 10;
+
+
+select count(inspection.facility_name) as c, inspection.facility_name from inspection join  violation on
+inspection.serial_number = violation.serial_number where violation.points >= 1 group by inspection.facility_name order by c limit 100;
