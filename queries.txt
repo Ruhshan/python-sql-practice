@@ -15,3 +15,16 @@ inspection.serial_number = violation.serial_number where violation.points >= 1 l
 
 select count(inspection.facility_name) as c, inspection.facility_name from inspection join  violation on
 inspection.serial_number = violation.serial_number where violation.points >= 1 group by inspection.facility_name order by c limit 100;
+
+select inspection.facility_zip,  violation.points from inspection join  violation on
+inspection.serial_number = violation.serial_number
+where inspection.activity_date between date('2015-07-01') and date('2017-12-31') limit 10;
+
+select inspection.facility_zip,  avg(violation.points) from inspection join  violation on
+inspection.serial_number = violation.serial_number
+where inspection.activity_date between date('2015-07-01') and date('2017-12-31') group by inspection.facility_zip limit 10;
+
+select strftime("%m-%Y",inspection.activity_date) d,  avg(violation.points)
+from inspection join  violation on inspection.serial_number = violation.serial_number
+where inspection.activity_date between date('2015-07-01') and date('2017-12-31') and inspection.facility_zip ='90028'
+group by d order by d desc;
